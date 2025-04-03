@@ -6,3 +6,10 @@ Welcome to our Cyber-Security Project. We, Labib Tahmid, Towhidul Islam and Ashr
 
 Starting our project. Have a outline for the project, lets see how much we can progress!
 Forgot many things about web programming, This project is going to be a good way to revise them!
+
+So generating the AES key was simpler but took many time because I overly complicated it. I was trying to convert 16 length letter to 16 length number, with double transposition and etc.
+Actually it was easy by taking the key size 8 length letter, because 8 length letter can give 16 length number!
+
+This for today, next day will work on Key expansion!
+
+2. 04 April 2025
