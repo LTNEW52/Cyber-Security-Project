@@ -1,0 +1,85 @@
+body{
+    background-color: rgb(31, 29, 29);
+    margin: 0px;
+}
+
+#Welcome{
+    color: aqua;
+    text-shadow: 2px 2px 5px rgb(23, 248, 248);
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+#EncryptionDecryption{
+    height: 520px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+#Encryption , #Decryption{
+    margin: 0px;
+    color: aquamarine;
+    background-color: rgb(88, 83, 83);
+    border: 1px solid black;
+    width: 50%;
+    height: inherit;
+    padding: 20px 0px 30px 0px;
+    box-sizing: border-box;
+    float: left;
+    font-weight: bold;
+}
+
+#Encryption h1 , #Decryption h1{
+    text-shadow: 4px 4px 5px rgb(0, 0, 0);
+    margin-bottom: 20px;
+}
+
+.container {
+    padding: 30px;
+}
+
+.container .Whole {
+    display: block;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 20px;
+    height: 30px;
+    width: 85%;
+}
+
+
+#Encryption #encryptedKey{
+    border: 2px dotted cornflowerblue;
+    margin: auto;
+    text-align: center;
+    width: 80%;
+    height: 50px;
+}
+
+#Decryption {
+    color: cornflowerblue;
+}
+
+#result{
+    color: aqua;
+    background-color: rgb(19, 17, 17);
+    border: 2px dashed aqua;
+    height: auto;
+    box-sizing: border-box;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.8rcap;
+}
+
+#result #encryptedMSG , #result #decryptedMSG{
+    border: 2px dotted cornflowerblue;
+    width: 80%;
+    margin: auto;
+    height: 50px;
+    margin-bottom: 30px;
+}
+
+/* 03 April 2025 Done */
