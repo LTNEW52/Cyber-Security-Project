@@ -4,7 +4,7 @@ Welcome to our Cyber-Security Project. We, Labib Tahmid, Towhidul Islam and Ashr
 
 1. 03 April 2025
 
-Starting our project. Have a outline for the project, lets see how much we can progress!
+Starting my project. Have a outline for the project, lets see how much I can progress!
 Forgot many things about web programming, This project is going to be a good way to revise them!
 
 So generating the AES key was simpler but took many time because I overly complicated it. I was trying to convert 16 length letter to 16 length number, with double transposition and etc.
@@ -13,3 +13,7 @@ Actually it was easy by taking the key size 8 length letter, because 8 length le
 This for today, next day will work on Key expansion!
 
 2. 04 April 2025
+
+Worked on Key expansion today, mainly word(0) part. It was tough, rotating and subsitution could be done better, but sticked with the knowledge I have.
+Rotating and subsitituion works alright, but i am seeing some "undefined" problem when calling both. Some numbers issue i think, will work on it maybe tomorrow.
+After that key expansion will probably finish, very little is left!
