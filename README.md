@@ -17,3 +17,10 @@ This for today, next day will work on Key expansion!
 Worked on Key expansion today, mainly word(0) part. It was tough, rotating and subsitution could be done better, but sticked with the knowledge I have.
 Rotating and subsitituion works alright, but i am seeing some "undefined" problem when calling both. Some numbers issue i think, will work on it maybe tomorrow.
 After that key expansion will probably finish, very little is left!
+
+3. 06 April 2025 - 07 April 2025
+
+Finally finished Key expansion today! It was hard maintaining all things, small slip up gave
+a lot of trouble, such as not padding properly gave undefined error, as each key is dependent on other keys!
+Still found all the errors and solved them, hope there is no more errors! Now I will move to main AES Encryption, probably after 2 days, I have some work to do!
+All 44 Key looked majestic!
