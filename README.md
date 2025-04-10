@@ -24,3 +24,11 @@ Finally finished Key expansion today! It was hard maintaining all things, small 
 a lot of trouble, such as not padding properly gave undefined error, as each key is dependent on other keys!
 Still found all the errors and solved them, hope there is no more errors! Now I will move to main AES Encryption, probably after 2 days, I have some work to do!
 All 44 Key looked majestic!
+
+4. 10 April 2025
+
+Started working on AES Encryption, but realized I have to modify the message as blocks and need to pad it if necessary. Also made it hexa.
+After that made it 4\*4 State matrix. I first thought the matrix will be row by row, but later realized the matrix must be column by column. But it was useful because I need to do the same with keys.
+Tomorrow I will work on the main AES functions!
+
+5.
