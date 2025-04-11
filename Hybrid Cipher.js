@@ -29,6 +29,14 @@ const sbox = [
     0x80000000, 0x1B000000, 0x36000000
   ];
 
+  const mixColumnMatrix = [
+    [0x02, 0x03, 0x01, 0x01],
+    [0x01, 0x02, 0x03, 0x01],
+    [0x01, 0x01, 0x02, 0x03],
+    [0x03, 0x01, 0x01, 0x02]
+  ];
+  
+
   
                                     /* Functions */
 
@@ -37,7 +45,7 @@ const sbox = [
 function rotWord(x) {
     x = [...x]
     temp = []
-    
+
     for (let i = 0 ; i < x.length - 2 ; i+=2) { /* No need for changing the last one */
         temp[0] = x[i]
         temp[1] = x[i+1] /* A manual left shift , For AB CD EF GH */
@@ -198,16 +206,60 @@ function messageBlock (message) {
 
 /* Extra Function for AES Encryption */
 
-function subBytes () {
-
+function subBytes (x) {
+    for (let i = 0 ; i < 4 ; i++) {
+        for (let j = 0 ; j < 4 ; j++) {
+            temp = [...x[i][j]]
+            if (temp[0] ==  "a" | temp[0] == "b" | temp[0] == "c" | temp[0] == "d" | temp[0] == "e" | temp[0] == "f") {
+                temp[0] = parseInt(temp[0] , 16)
+            } else if ( temp[1] == "a" | temp[1] == "b" | temp[1] == "c" | temp[1] == "d" | temp[1] == "e" | temp[1] == "f") {
+                temp[1] = parseInt(temp[1] , 16)
+            }
+            x[i][j] = sbox[temp[0]][temp[1]].toString(16).padStart(2 , 0)
+        }
+    }
+    return x
 }
 
-function shiftRows () {
-
+function shiftRows (x) {
+    for (let i = 0 ; i < 4 ; i++) {
+        if (i == 1) {
+            y = rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        } else if (i == 2) {
+            y = rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3]))
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        } else if (i == 3) {
+            y = rotWord(rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])))
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        }               
+    }
+    return x
+    /* It's like this becuase I used existing function rotWord() , which is structured a
+    bit differently */
 }
 
-function mixColumns () {
-
+function mixColumns (x) { // not working!!!
+    temp = []
+    for (let i = 0 ; i < 4 ; i++) {
+        for (let j = 0 ; j < 4 ; j++) {
+            for (let k = 0 ; k < 4 ; k++) {
+                temp[k] = mixColumnMatrix[i][k] * x[k][i]
+            } 
+            console.log(temp)
+            x[j][i] = (temp[0] ^ temp[1] ^ temp[2] ^ temp[3]).toString(16).padStart(2 , 0)
+        }
+        console.log(x[i])
+    }
 }
 
 function addRoundKey () {
@@ -233,11 +285,12 @@ function AESEncryption (fractionMessage) {
         }
     }
 
-    console.log(fracUpdMsg)
+    //console.log(shiftRows(subBytes(fracUpdMsg)))
+    mixColumns(fracUpdMsg)
 
     /* Iterate Rounds */
 
-    for (let i = 0 ; i < 12 ; i++) { // One pre-round and 10 rounds for AES-128
+    /*for (let i = 0 ; i < 12 ; i++) { // One pre-round and 10 rounds for AES-128
         if (i == 0) {
             addRoundKey()
         } else if (i == 11) {
@@ -245,7 +298,7 @@ function AESEncryption (fractionMessage) {
         } else {
             addRoundKey(mixColumns(shiftRows(subBytes)))
         }
-    }
+    }*/
 }
 
 

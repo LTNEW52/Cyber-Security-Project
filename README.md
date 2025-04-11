@@ -31,4 +31,8 @@ Started working on AES Encryption, but realized I have to modify the message as 
 After that made it 4\*4 State matrix. I first thought the matrix will be row by row, but later realized the matrix must be column by column. But it was useful because I need to do the same with keys.
 Tomorrow I will work on the main AES functions!
 
-5.
+5. 11 April 2025
+
+Completed subBytes and shiftRows. Worked on mixcolumn but it is very very complicated! Many errors are showing up, so I need to work on that tomorrow!
+
+6.
