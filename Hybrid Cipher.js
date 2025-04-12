@@ -157,6 +157,19 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
         k++
     }
     // console.log(ENCRYPTKEYEXPANSION) /* Finally, ENCRYPTKEYEXPANSION DONE!!! */
+
+    temp = [...ENCRYPTKEYEXPANSION]
+    ENCRYPTKEYEXPANSION = []
+    k = 0
+
+    for (let i = 0 ; i < 11 ; i++) {
+        ENCRYPTKEYEXPANSION[i] = []
+        for (let j = 0 ; j < 4 ; j++) {
+            ENCRYPTKEYEXPANSION[i][j] = temp[k]
+            k++
+        }
+    }
+
     return ENCRYPTKEYEXPANSION
 }
 
@@ -248,27 +261,63 @@ function shiftRows (x) {
     bit differently */
 }
 
-function mixColumns (x) { // not working!!!
-    temp = []
-    for (let i = 0 ; i < 4 ; i++) {
-        for (let j = 0 ; j < 4 ; j++) {
-            for (let k = 0 ; k < 4 ; k++) {
-                temp[k] = mixColumnMatrix[i][k] * x[k][i]
-            } 
-            console.log(temp)
-            x[j][i] = (temp[0] ^ temp[1] ^ temp[2] ^ temp[3]).toString(16).padStart(2 , 0)
-        }
-        console.log(x[i])
+function GaloisField (a , b) {
+    if (a * b > 255) {
+        return ((a * b) % 256)
+    } else {
+        return a * b
     }
 }
 
-function addRoundKey () {
+function mixColumns (x) {
+    temp = []
+    for (let i = 0 ; i < 4 ; i++) {
+        temp[i] = []
+        for (let j = 0 ; j < 4 ; j++) {
+            temp[i][j] = (GaloisField(mixColumnMatrix[j][0] , parseInt(x[0][i] , 16)) ^ GaloisField(mixColumnMatrix[j][1] , parseInt(x[1][i] , 16)) ^ GaloisField(mixColumnMatrix[j][2] , parseInt(x[2][i] , 16)) ^ GaloisField(mixColumnMatrix[j][3] , parseInt(x[3][i] , 16))).toString(16).padStart(2 , 0)
+        }
+    }
+    for (let i = 0 ; i < 4 ; i++) {
+        for (let j = 0 ; j < 4 ; j++) {
+            x[j][i] = temp[i][j]
+        }
+    }
+    return x
+    /* Very Very Dangerous Function, may cause many problem. Need Inverse number for Decryption */
+}
 
+function addRoundKey (x , key) {
+    
+    /* Arranging Key */
+
+    let keyUse = new Array([] , [] , [] , [])
+    let k = l = 0
+    
+    for(let i = 0 ; i < 4 ; i++) {
+        for(let j = 0 ; j < 4 ; j++) {
+            keyUse[j][i] = key[k][l] + key[k][l+1]
+            l+=2
+        }
+        k++
+        l = 0
+    }
+
+    /* Adding Round Key */
+
+    let temp = new Array([] , [] , [] , [])
+
+    for(let i = 0 ; i < 4 ; i++) {
+        for(let j = 0 ; j < 4 ; j++) {
+            temp[i][j] = (parseInt(x[i][j] , 16) ^ parseInt(keyUse[i][j] , 16)).toString(16).padStart(2 , 0)
+        }
+    }
+    x = [...temp]
+    return x
 }
 
 /* AES Encryption Function */
 
-function AESEncryption (fractionMessage) {
+function AESEncryption (fractionMessage , keyExpansion) {
 
     /* Making the message as 4*4 */
 
@@ -285,20 +334,18 @@ function AESEncryption (fractionMessage) {
         }
     }
 
-    //console.log(shiftRows(subBytes(fracUpdMsg)))
-    mixColumns(fracUpdMsg)
-
     /* Iterate Rounds */
 
-    /*for (let i = 0 ; i < 12 ; i++) { // One pre-round and 10 rounds for AES-128
+    for (let i = 0 ; i < 11 ; i++) { // One pre-round and 10 rounds for AES-128
         if (i == 0) {
-            addRoundKey()
-        } else if (i == 11) {
-            addRoundKey(shiftRows(subBytes()))
+            fractionMessage = addRoundKey(fractionMessage , keyExpansion[i])
+        } else if (i == 10) {
+            fractionMessage = addRoundKey(shiftRows(subBytes(fractionMessage)) , keyExpansion[i])
         } else {
-            addRoundKey(mixColumns(shiftRows(subBytes)))
+            fractionMessage = addRoundKey(mixColumns(shiftRows(subBytes(fractionMessage))) , keyExpansion[i])
         }
-    }*/
+        console.log(fractionMessage) /* Cant Encrypt all round, check problem! */
+    }
 }
 
 
@@ -325,7 +372,7 @@ encBtn.onclick = () => {
         /* AES Encryption */
 
         for (let i = 0 ; i < UPDATEDHEXAMESSAGE.length ; i++) {
-            AESEncryption(UPDATEDHEXAMESSAGE[i])
+            AESEncryption(UPDATEDHEXAMESSAGE[i] , ENCRYPTKEYEXPANSION)
         }
         
 

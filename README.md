@@ -5,9 +5,11 @@ Welcome to our Cyber-Security Project. We, Labib Tahmid, Towhidul Islam and Ashr
 1. 03 April 2025
 
 Starting my project. Have a outline for the project, lets see how much I can progress!
+
 Forgot many things about web programming, This project is going to be a good way to revise them!
 
 So generating the AES key was simpler but took many time because I overly complicated it. I was trying to convert 16 length letter to 16 length number, with double transposition and etc.
+
 Actually it was easy by taking the key size 8 length letter, because 8 length letter can give 16 length number!
 
 This for today, next day will work on Key expansion!
@@ -15,24 +17,37 @@ This for today, next day will work on Key expansion!
 2. 04 April 2025
 
 Worked on Key expansion today, mainly word(0) part. It was tough, rotating and subsitution could be done better, but sticked with the knowledge I have.
+
 Rotating and subsitituion works alright, but i am seeing some "undefined" problem when calling both. Some numbers issue i think, will work on it maybe tomorrow.
+
 After that key expansion will probably finish, very little is left!
 
 3. 06 April 2025 - 07 April 2025
 
-Finally finished Key expansion today! It was hard maintaining all things, small slip up gave
-a lot of trouble, such as not padding properly gave undefined error, as each key is dependent on other keys!
+Finally finished Key expansion today! It was hard maintaining all things, small slip up gave a lot of trouble, such as not padding properly gave undefined error, as each key is dependent on other keys!
+
 Still found all the errors and solved them, hope there is no more errors! Now I will move to main AES Encryption, probably after 2 days, I have some work to do!
+
 All 44 Key looked majestic!
 
 4. 10 April 2025
 
 Started working on AES Encryption, but realized I have to modify the message as blocks and need to pad it if necessary. Also made it hexa.
+
 After that made it 4\*4 State matrix. I first thought the matrix will be row by row, but later realized the matrix must be column by column. But it was useful because I need to do the same with keys.
+
 Tomorrow I will work on the main AES functions!
 
 5. 11 April 2025
 
 Completed subBytes and shiftRows. Worked on mixcolumn but it is very very complicated! Many errors are showing up, so I need to work on that tomorrow!
 
-6.
+6. 12 April 2025
+
+Finished MixColumn. There is a huge But here, for other functions I ignored the bit calculation, and those work, but for this GF(2^n) was bit calculation. I implemented a decimal way, but not sure how well it worked. I am curious about reversing process. While it is possible to reverse, by finding Inverse of the number, which is additional pain, but I think logic will work just fine. If not , DEAD END!
+
+Also finished add Round Key, All the components are complete! But as usual, There is some problem. It is getting stuck round 2 or 3. Need to check it tomorrow!
+
+After that will start working on RSA. Another Tough Algorithm!
+
+7.
