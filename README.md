@@ -50,4 +50,12 @@ Also finished add Round Key, All the components are complete! But as usual, Ther
 
 After that will start working on RSA. Another Tough Algorithm!
 
-7.
+7. 13 April 2025
+
+Finished AES Encryption Atlast. Previous problem was, not properly converting hexa to decimal for subBytes. After that it was straightforward, Just modifying for a long encrypt message string. Did more work on main Webpage, like adding animations, rearranging components to show the encrypted message.
+
+Also started basic work on RSA. We need 16 byte RSA prime(not practical but works for this project), which is tough to get manually. So I got 20 prime numbers and stored it as array, just as random AES key, I will pick random prime number from them!
+
+Also I need to show the user public & private key. Again not practical, but for this project I am not focusing on secure private public key exchange. The main goal is understanding the algorithm and they are fun! And also pain 😣.
+
+8.

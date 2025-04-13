@@ -1,19 +1,43 @@
 body{
-    background-color: rgb(31, 29, 29);
+    background-color: rgb(34, 31, 31);
     margin: 0px;
+}
+
+#floating {
+    height: 90px;
+    text-align: center;
 }
 
 #Welcome{
     color: aqua;
     text-shadow: 2px 2px 5px rgb(23, 248, 248);
-    margin-top: 50px;
-    margin-bottom: 50px;
-    text-align: center;
+    width: fit-content;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    animation-name: move;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    display: inline-block;
+}
+
+#dropdown {
+    text-align: right;
+    display: inline-block;
+    position: absolute;
+    margin-top: 15px;
+    right: 5%;
+    font-size: 1.8rem;
+    background-color: rgb(0, 0, 0);
+    color: aqua;
+    border-radius: 50px;
+    padding: 10px;
 }
 
 #EncryptionDecryption{
     height: 600px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     text-align: center;
 }
 
@@ -36,7 +60,7 @@ body{
 }
 
 .container {
-    padding: 30px;
+    padding: 30px 0px 10px 0px;
 }
 
 .container .Whole {
@@ -46,8 +70,8 @@ body{
     margin-bottom: 20px;
     height: 30px;
     width: 85%;
+    font-size: 1.3rem;
 }
-
 
 #Encryption #encryptedKey{
     border: 2px dotted cornflowerblue;
@@ -71,7 +95,7 @@ body{
     margin: auto;
     text-align: center;
     font-weight: bold;
-    font-size: 1.8rcap;
+    font-size: 1.2rem;
 }
 
 #result #encryptedMSG , #result #decryptedMSG{
@@ -79,7 +103,10 @@ body{
     width: 80%;
     margin: auto;
     height: 50px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button{
@@ -98,4 +125,20 @@ body{
     font-size: 1.5rem;
 }
 
-/* 03 April 2025 Done */
+#enc{
+    color: rgb(255, 82, 82);
+    font-size: 1.5rem;
+    animation-name: glow;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
+@keyframes move {
+    50% {transform: rotateX(360deg)}
+}
+
+@keyframes glow {
+    50% {opacity: 10%;}
+}

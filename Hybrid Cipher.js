@@ -1,6 +1,7 @@
 const encBtn = document.getElementById("submitEncrypt")
 const encMsg = document.getElementById("msgEncrypt")
 const pubKey = document.getElementById("recieverPublicKey")
+const encMsgShow = document.getElementById("enc")
 
 letterArray = ["A" , "B" , "C" , "D" , "E" , "F" , "G" , "H" , "I" , "J" , "K" , "L" , "M" , "N" , "O" , "P" , "Q" , "R" , "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "@" , "#" , "$" , "%" , "&"]
 
@@ -35,6 +36,30 @@ const sbox = [
     [0x01, 0x01, 0x02, 0x03],
     [0x03, 0x01, 0x01, 0x02]
   ];
+
+  const PRIME_128_HEX = [
+    "0xD5BBB96D30086EC484EBA3D7F9CAEB07",
+    "0xC34F7F63E59B9EA84D36879D7F57C20C",
+    "0xE9A80D0A5B7C0F3B1C65DAB5C27F29DA",
+    "0x425D2B9BFDB25B9CF6C416CC6E37B59C",
+    "0xF7E75FDC469067FFDC4E847C51F452DF",
+    "0x9C05A8D93C9C1C8451B93E3E5F125ABF",
+    "0xD8E1F68B0C1ED2B9BADC7AB8E5C77A7B",
+    "0xBBE2E8F347A0BD8C6B74A94C1F9463C3",
+    "0xAA765D6C2A5E147C09E29A1F76BEA013",
+    "0xCE2F8031B8A95A2F8D65C96A42D843CD",
+    "0x8FA47F962E6018E5D67C1DA5093CC64F",
+    "0xAD5D6B1C923B7702FC34853B4CE066F3",
+    "0xB6EFA11D9D18328D1879E98D129B3077",
+    "0xF1A32D086B9A5F3DADDC89B661D8CF33",
+    "0xC6C7D6BAF12C8D61D70C2ACDD4EB3ED9",
+    "0xA74323B0F07F642019A81735924F6F45",
+    "0x82E7E9D6E67F07B92541A7A2FDF543F3",
+    "0xEAB5FC04C4F73B720C86EF2E163E3F17",
+    "0x9189B20F4FCE6B628E7D2E3607F13AD1",
+    "0xC4E1F0A7596E20D514A60FE902ABE497"
+  ];
+  
   
 
   
@@ -225,10 +250,11 @@ function subBytes (x) {
             temp = [...x[i][j]]
             if (temp[0] ==  "a" | temp[0] == "b" | temp[0] == "c" | temp[0] == "d" | temp[0] == "e" | temp[0] == "f") {
                 temp[0] = parseInt(temp[0] , 16)
-            } else if ( temp[1] == "a" | temp[1] == "b" | temp[1] == "c" | temp[1] == "d" | temp[1] == "e" | temp[1] == "f") {
+            } 
+            if ( temp[1] == "a" | temp[1] == "b" | temp[1] == "c" | temp[1] == "d" | temp[1] == "e" | temp[1] == "f") {
                 temp[1] = parseInt(temp[1] , 16)
             }
-            x[i][j] = sbox[temp[0]][temp[1]].toString(16).padStart(2 , 0)
+            x[i][j] = (sbox[temp[0]][temp[1]]).toString(16).padStart(2 , 0)
         }
     }
     return x
@@ -344,16 +370,26 @@ function AESEncryption (fractionMessage , keyExpansion) {
         } else {
             fractionMessage = addRoundKey(mixColumns(shiftRows(subBytes(fractionMessage))) , keyExpansion[i])
         }
-        console.log(fractionMessage) /* Cant Encrypt all round, check problem! */
     }
+    /* Got the final Encryption */
+    return fractionMessage
 }
 
 
                                     /* Main() */
 
-/* Checking if input is not null */
+
+/* Generating Public and Private Key */
+
+
+
+
+/* AES Encryption and RSA Key Generation */
 
 encBtn.onclick = () => {
+
+    /* Checking if input is not null */
+
     if (encMsg.value && pubKey.value) {
         encryptMessage = encMsg.value
         publicKey = pubKey.value
@@ -361,6 +397,7 @@ encBtn.onclick = () => {
         let AESKEY = []
         let ENCRYPTKEYEXPANSION = []
         let UPDATEDHEXAMESSAGE = []
+        let encryptedMessage = ""
 
         /* Key generation */
         AESKEY = AESKeyGenerate(AESKEY)
@@ -372,9 +409,23 @@ encBtn.onclick = () => {
         /* AES Encryption */
 
         for (let i = 0 ; i < UPDATEDHEXAMESSAGE.length ; i++) {
-            AESEncryption(UPDATEDHEXAMESSAGE[i] , ENCRYPTKEYEXPANSION)
+            temp = []
+            temp = AESEncryption(UPDATEDHEXAMESSAGE[i] , ENCRYPTKEYEXPANSION)
+            
+            for (let j = 0 ; j < 4 ; j++) {
+                for (let k = 0 ; k < 4 ; k++) {
+                    encryptedMessage += temp[k][j]
+                }
+            }
         }
-        
+
+        /* Encrypted Message Show */
+
+        encMsgShow.textContent = encryptedMessage
+
+        /* Encrypting AES Key with RSA */
+
+
 
     } else {
         console.log("False")
