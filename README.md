@@ -58,4 +58,8 @@ Also started basic work on RSA. We need 16 byte RSA prime(not practical but work
 
 Also I need to show the user public & private key. Again not practical, but for this project I am not focusing on secure private public key exchange. The main goal is understanding the algorithm and they are fun! And also pain 😣.
 
-8.
+8. 16 April 2025
+
+Didn't do much today, some HTML tweaking and started RSA key generation!
+
+9.

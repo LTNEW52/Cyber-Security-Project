@@ -37,7 +37,7 @@ const sbox = [
     [0x03, 0x01, 0x01, 0x02]
   ];
 
-  const PRIME_128_HEX = [
+  const primeHex = [
     "0xD5BBB96D30086EC484EBA3D7F9CAEB07",
     "0xC34F7F63E59B9EA84D36879D7F57C20C",
     "0xE9A80D0A5B7C0F3B1C65DAB5C27F29DA",
@@ -104,7 +104,7 @@ function subWord(x) {
 
 function AESKeyGenerate(AESKEY) {
     for (let i = 0 ; i < 16 ; i++) {
-        randomNum = Math.floor(Math.random() * letterArray.length) /* No need for +1 because len is already +1 */
+        randomNum = Math.floor(Math.random() * letterArray.length) /* No need for +1 because selecting from array */
         AESKEY[i] = letterArray[randomNum]
     }
     return AESKEY
@@ -381,7 +381,12 @@ function AESEncryption (fractionMessage , keyExpansion) {
 
 /* Generating Public and Private Key */
 
-
+p = primeHex[Math.floor(Math.random() * primeHex.length)]
+q = primeHex[Math.floor(Math.random() * primeHex.length)]
+n = BigInt(p) * BigInt(q)
+phiOfn = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1))
+e = 65537 // Usually used in RSA
+d = 
 
 
 /* AES Encryption and RSA Key Generation */

@@ -28,11 +28,32 @@ body{
     position: absolute;
     margin-top: 15px;
     right: 5%;
-    font-size: 1.8rem;
+    background-color: black;
+    border-radius: 50px;
+}
+
+#dropdown button{
     background-color: rgb(0, 0, 0);
     color: aqua;
-    border-radius: 50px;
+    font-size: 1.8rem;
+    display: block;
     padding: 10px;
+    border-radius: 50px;
+}
+
+#dropdown a{
+    display: block;
+    text-decoration: none;
+    text-align: left;
+    padding: 15px;
+    font-size: 1.3rem;
+    color: white;
+    display: none;
+    pointer-events: none;
+}
+
+#dropdown:hover a {
+    display: block;
 }
 
 #EncryptionDecryption{
