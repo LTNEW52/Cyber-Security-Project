@@ -62,4 +62,10 @@ Also I need to show the user public & private key. Again not practical, but for 
 
 Didn't do much today, some HTML tweaking and started RSA key generation!
 
-9.
+9. 17 April 2025
+
+Finished RSA Encryption, It was interesting, learned a new thing, modular exponent. Also got the encrypted AES key. 77 length, impressive!
+
+Tried very early stage of RSA Decryption, it is not returning what I wanted though, so more work needed tomorrow!
+
+10.

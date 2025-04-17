@@ -2,8 +2,15 @@ const encBtn = document.getElementById("submitEncrypt")
 const encMsg = document.getElementById("msgEncrypt")
 const pubKey = document.getElementById("recieverPublicKey")
 const encMsgShow = document.getElementById("enc")
+const pubshow = document.getElementById("public")
+const privshow = document.getElementById("private")
+const encryptedKey = document.getElementById("encryptedKey")
+const decBtn = document.getElementById("submitDecrypt")
+const decMsg = document.getElementById("msgDecrypt")
+const encSymKey = document.getElementById("encryptedSymmatricKey")
+const privKey = document.getElementById("recieverPrivateKey")
 
-letterArray = ["A" , "B" , "C" , "D" , "E" , "F" , "G" , "H" , "I" , "J" , "K" , "L" , "M" , "N" , "O" , "P" , "Q" , "R" , "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "@" , "#" , "$" , "%" , "&"]
+const letterArray = ["A" , "B" , "C" , "D" , "E" , "F" , "G" , "H" , "I" , "J" , "K" , "L" , "M" , "N" , "O" , "P" , "Q" , "R" , "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "@" , "#" , "$" , "%" , "&"]
 
 const sbox = [
     [0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76],
@@ -69,7 +76,7 @@ const sbox = [
 
 function rotWord(x) {
     x = [...x]
-    temp = []
+    let temp = []
 
     for (let i = 0 ; i < x.length - 2 ; i+=2) { /* No need for changing the last one */
         temp[0] = x[i]
@@ -93,7 +100,7 @@ function subWord(x) {
     }
 
     for (let i = 0 ; i < x.length ; i+=2) {
-        temp = sbox[x[i]][x[i+1]].toString(16).padStart(2 , 0)
+        let temp = sbox[x[i]][x[i+1]].toString(16).padStart(2 , 0)
         x[i] = temp[0]
         x[i+1] = temp[1]
     }
@@ -104,7 +111,7 @@ function subWord(x) {
 
 function AESKeyGenerate(AESKEY) {
     for (let i = 0 ; i < 16 ; i++) {
-        randomNum = Math.floor(Math.random() * letterArray.length) /* No need for +1 because selecting from array */
+        let randomNum = Math.floor(Math.random() * letterArray.length) /* No need for +1 because selecting from array */
         AESKEY[i] = letterArray[randomNum]
     }
     return AESKEY
@@ -134,11 +141,12 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
     while(k < 44) {  /* as 11 round, 4*11 */
         
         if (k % 4 == 0) {   /* if it is first column */
+
             /* Calculating t */
 
-            t = []
-            subRotAns = subWord(rotWord([...ENCRYPTKEYEXPANSION[k-1]]))
-            rconAns = rcon[Math.trunc(k/4)].toString(16)
+            let t = []
+            let subRotAns = subWord(rotWord([...ENCRYPTKEYEXPANSION[k-1]]))
+            let rconAns = rcon[Math.trunc(k/4)].toString(16)
             rconAns = [...rconAns]
 
             if (rconAns.length != 8) {
@@ -146,19 +154,19 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
             }
   
             for (let i = 0 ; i < subRotAns.length ; i+=2) {
-                t1 = parseInt((subRotAns[i] + subRotAns[i+1]) , 16)
-                t2 = parseInt((rconAns[i] + rconAns[i+1]) , 16)
+                let t1 = parseInt((subRotAns[i] + subRotAns[i+1]) , 16)
+                let t2 = parseInt((rconAns[i] + rconAns[i+1]) , 16)
                 t.push(t1 ^ t2)
             }
 
             /* Generating key for first column */
 
-            keyExp0 = []
-            word0Col = [...ENCRYPTKEYEXPANSION[k-4]]
+            let keyExp0 = []
+            let word0Col = [...ENCRYPTKEYEXPANSION[k-4]]
             let l = 0
 
             for (let i = 0 ; i < word0Col.length ; i+=2) {
-                temp = parseInt((word0Col[i] + word0Col[i+1]) , 16)
+                let temp = parseInt((word0Col[i] + word0Col[i+1]) , 16)
                 keyExp0.push((t[l] ^ temp).toString(16).padStart(2 , 0))
                 l++
             }
@@ -167,13 +175,13 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
         } else {
             /* Generating Key for else */
 
-            keyExp = []
-            prevW = [...ENCRYPTKEYEXPANSION[k-1]]
-            prevUpW = [...ENCRYPTKEYEXPANSION[k-4]]
+            let keyExp = []
+            let prevW = [...ENCRYPTKEYEXPANSION[k-1]]
+            let prevUpW = [...ENCRYPTKEYEXPANSION[k-4]]
 
             for (let i = 0 ; i < prevW.length ; i+=2) {
-                wP = parseInt((prevW[i] + prevW[i+1]) , 16)
-                wUP = parseInt((prevUpW[i] + prevUpW[i+1]) , 16)
+                let wP = parseInt((prevW[i] + prevW[i+1]) , 16)
+                let wUP = parseInt((prevUpW[i] + prevUpW[i+1]) , 16)
                 keyExp.push((wP ^ wUP).toString(16).padStart(2 , 0))
             }
 
@@ -181,9 +189,9 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
         }
         k++
     }
-    // console.log(ENCRYPTKEYEXPANSION) /* Finally, ENCRYPTKEYEXPANSION DONE!!! */
+    /* Finally, ENCRYPTKEYEXPANSION DONE!!! */
 
-    temp = [...ENCRYPTKEYEXPANSION]
+    let temp = [...ENCRYPTKEYEXPANSION]
     ENCRYPTKEYEXPANSION = []
     k = 0
 
@@ -204,7 +212,7 @@ function messageBlock (message) {
 
     /* Making the Message as blocks */
 
-    newMessage = []
+    let newMessage = []
     message = [...message]
 
     if (message.length < 16) {
@@ -216,7 +224,7 @@ function messageBlock (message) {
 
     } else if (message.length > 16) {
 
-        n = Math.trunc(message.length / 16)
+        let n = Math.trunc(message.length / 16)
         let k = 0
         while (k < message.length) {
             for (let i = 0 ; i <= n ; i++) {
@@ -234,7 +242,7 @@ function messageBlock (message) {
     
     /* Converting to HEXA */
 
-    for (i = 0 ; i < newMessage.length ; i++) {
+    for (let i = 0 ; i < newMessage.length ; i++) {
         for (let j = 0 ; j < 16 ; j++) {
             newMessage[i][j] = newMessage[i][j].charCodeAt().toString(16).padStart(2 , 0)
         }
@@ -247,7 +255,7 @@ function messageBlock (message) {
 function subBytes (x) {
     for (let i = 0 ; i < 4 ; i++) {
         for (let j = 0 ; j < 4 ; j++) {
-            temp = [...x[i][j]]
+            let temp = [...x[i][j]]
             if (temp[0] ==  "a" | temp[0] == "b" | temp[0] == "c" | temp[0] == "d" | temp[0] == "e" | temp[0] == "f") {
                 temp[0] = parseInt(temp[0] , 16)
             } 
@@ -263,19 +271,19 @@ function subBytes (x) {
 function shiftRows (x) {
     for (let i = 0 ; i < 4 ; i++) {
         if (i == 1) {
-            y = rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])
+            let y = rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])
             x[i][0] = y[0] + y [1]
             x[i][1] = y[2] + y [3]
             x[i][2] = y[4] + y [5]
             x[i][3] = y[6] + y [7]
         } else if (i == 2) {
-            y = rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3]))
+            let y = rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3]))
             x[i][0] = y[0] + y [1]
             x[i][1] = y[2] + y [3]
             x[i][2] = y[4] + y [5]
             x[i][3] = y[6] + y [7]
         } else if (i == 3) {
-            y = rotWord(rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])))
+            let y = rotWord(rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])))
             x[i][0] = y[0] + y [1]
             x[i][1] = y[2] + y [3]
             x[i][2] = y[4] + y [5]
@@ -296,7 +304,7 @@ function GaloisField (a , b) {
 }
 
 function mixColumns (x) {
-    temp = []
+    let temp = []
     for (let i = 0 ; i < 4 ; i++) {
         temp[i] = []
         for (let j = 0 ; j < 4 ; j++) {
@@ -347,7 +355,7 @@ function AESEncryption (fractionMessage , keyExpansion) {
 
     /* Making the message as 4*4 */
 
-    fracUpdMsg = []
+    let fracUpdMsg = []
 
     for (let i = 0 ; i < 4 ; i++) {
         fracUpdMsg[i] = []
@@ -375,19 +383,64 @@ function AESEncryption (fractionMessage , keyExpansion) {
     return fractionMessage
 }
 
+/* Extra function of RSA Algorithm */
+
+function extendedEuclidean (phi , e) {
+    let r1 = phi
+    let r2 = e
+    let t1 = BigInt(0)
+    let t2 = BigInt(1)
+
+    while (r2 > 0) {
+        let q = r1 / r2
+        r = r1 - (q * r2)
+        r1 = r2
+        r2 = r
+        t = t1 - (q * t2)
+        t1 = t2
+        t2 = t
+    }
+
+    if (r1 == 1) {
+        if (t1 < BigInt(0)) {
+            return t1 + phi
+        } else {
+            return t1 // wrapping unnecessary if t1 is positive
+        }
+    }
+}
+
+function modularExponen(base , power , mod) {
+    if (power == BigInt(1)) {
+        return base % mod // We are starting from 1 and using the result to upper calls
+    } else if (power == BigInt(0)) {
+        return 1 // Stoping recursion, same as return True in py
+    }
+
+    if (power % BigInt(2) == 0) {
+        power = power / BigInt(2) // bigint actually gives the q, not decimal parts like int
+        call = modularExponen(base , power , mod) // 2^4 can called as 2^2 * 2 ^2
+        result = call * call % mod // no need to call same function repeatedly, it increases work
+    } else {
+        result = modularExponen(base , power - BigInt(1) , mod) * modularExponen(base , BigInt(1) , mod) % mod
+    }
+    return result
+}
 
                                     /* Main() */
 
 
 /* Generating Public and Private Key */
 
-p = primeHex[Math.floor(Math.random() * primeHex.length)]
-q = primeHex[Math.floor(Math.random() * primeHex.length)]
-n = BigInt(p) * BigInt(q)
-phiOfn = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1))
-e = 65537 // Usually used in RSA
-d = 
+const p = primeHex[Math.floor(Math.random() * primeHex.length)]
+const q = primeHex[Math.floor(Math.random() * primeHex.length)]
+const n = BigInt(p) * BigInt(q)
+let phiOfn = (BigInt(p) - BigInt(1)) * (BigInt(q) - BigInt(1)) // Need Bigint because JS cant work with both bigint and int
+const e = BigInt(65537) // Usually used in RSA
+const d = extendedEuclidean(phiOfn , e) // We are already wrapping the negative modulus , so need extra mod phiofn
 
+pubshow.textContent += e
+privshow.textContent += d
 
 /* AES Encryption and RSA Key Generation */
 
@@ -396,13 +449,14 @@ encBtn.onclick = () => {
     /* Checking if input is not null */
 
     if (encMsg.value && pubKey.value) {
-        encryptMessage = encMsg.value
-        publicKey = pubKey.value
+        const encryptMessage = encMsg.value
+        const publicKey = BigInt(pubKey.value)
 
         let AESKEY = []
         let ENCRYPTKEYEXPANSION = []
         let UPDATEDHEXAMESSAGE = []
         let encryptedMessage = ""
+        let RSAENCKEY = "0x"
 
         /* Key generation */
         AESKEY = AESKeyGenerate(AESKEY)
@@ -414,7 +468,7 @@ encBtn.onclick = () => {
         /* AES Encryption */
 
         for (let i = 0 ; i < UPDATEDHEXAMESSAGE.length ; i++) {
-            temp = []
+            let temp = []
             temp = AESEncryption(UPDATEDHEXAMESSAGE[i] , ENCRYPTKEYEXPANSION)
             
             for (let j = 0 ; j < 4 ; j++) {
@@ -430,9 +484,40 @@ encBtn.onclick = () => {
 
         /* Encrypting AES Key with RSA */
 
+        AESKEY.forEach(key => {
+            RSAENCKEY += key
+        });
 
-
+        RSAENCKEY = BigInt(RSAENCKEY)
+        RSAENCKEY = modularExponen(RSAENCKEY , publicKey , n)
+        
+        encryptedKey.textContent = RSAENCKEY
     } else {
-        console.log("False")
+        window.alert("Enter Your Message and Public Key and Then Try Again!")
+    }
+}
+
+/* RSA Key decryption and AES decryption */
+
+decBtn.onclick = () => {
+    if (decMsg.value && encSymKey.value && privKey.value) {
+
+        RSADECKEY = BigInt(encSymKey.value)
+        privateKey = BigInt(privKey.value)
+
+        // problems
+        console.log(String(RSADECKEY).length)
+
+        RSADECKEY = String(modularExponen(RSADECKEY , privateKey , n))
+        console.log(RSADECKEY.length)
+        let AESDECKEY = []
+
+        for (let i = 0 ; i < RSADECKEY.length ; i+=2) {
+            AESDECKEY.push(RSADECKEY[i] + RSADECKEY[i+1])
+        }
+        console.log(AESDECKEY)
+        
+    } else {
+        window.alert("Enter Your Encrypted Message, Encrypted Symmetric Key and Private Key and Then Try Again!")
     }
 }
