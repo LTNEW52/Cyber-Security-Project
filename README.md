@@ -68,4 +68,10 @@ Finished RSA Encryption, It was interesting, learned a new thing, modular expone
 
 Tried very early stage of RSA Decryption, it is not returning what I wanted though, so more work needed tomorrow!
 
-10.
+10. 22 April 2025
+
+Back after 5 days. I tried RSA decryption but faced a lot of problem. The main problem is, I am encrypting RSA Key which is 16 byte, but when decrypting the RSA, it is becoming 32 byte and They do not have anything simillar.
+
+So continued with AES decryption. Starting level is easy, generating keyexpansion again, Managaing the encrypted message as blocks again, and building the inverse functions. We can use encryption functions and just modify it for the inverse function. Symmatric encryption seems more easy than Asymmatric encryption. RSA really gave me a lot of trouble!
+
+11.

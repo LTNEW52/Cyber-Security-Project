@@ -29,22 +29,22 @@ const sbox = [
     [0x70, 0x3e, 0xb5, 0x66, 0x48, 0x03, 0xf6, 0x0e, 0x61, 0x35, 0x57, 0xb9, 0x86, 0xc1, 0x1d, 0x9e],
     [0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf],
     [0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16]
-  ];
+];
   
-  const rcon = [
+const rcon = [
     0x00000000, 0x01000000, 0x02000000, 0x04000000, 
     0x08000000, 0x10000000, 0x20000000, 0x40000000, 
     0x80000000, 0x1B000000, 0x36000000
-  ];
+];
 
-  const mixColumnMatrix = [
+const mixColumnMatrix = [
     [0x02, 0x03, 0x01, 0x01],
     [0x01, 0x02, 0x03, 0x01],
     [0x01, 0x01, 0x02, 0x03],
     [0x03, 0x01, 0x01, 0x02]
-  ];
+];
 
-  const primeHex = [
+const primeHex = [
     "0xD5BBB96D30086EC484EBA3D7F9CAEB07",
     "0xC34F7F63E59B9EA84D36879D7F57C20C",
     "0xE9A80D0A5B7C0F3B1C65DAB5C27F29DA",
@@ -65,9 +65,28 @@ const sbox = [
     "0xEAB5FC04C4F73B720C86EF2E163E3F17",
     "0x9189B20F4FCE6B628E7D2E3607F13AD1",
     "0xC4E1F0A7596E20D514A60FE902ABE497"
-  ];
+];
   
+const invSbox = [
+    [0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb],
+    [0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb],
+    [0x54, 0x7b, 0x94, 0x32, 0xa6, 0xc2, 0x23, 0x3d, 0xee, 0x4c, 0x95, 0x0b, 0x42, 0xfa, 0xc3, 0x4e],
+    [0x08, 0x2e, 0xa1, 0x66, 0x28, 0xd9, 0x24, 0xb2, 0x76, 0x5b, 0xa2, 0x49, 0x6d, 0x8b, 0xd1, 0x25],
+    [0x72, 0xf8, 0xf6, 0x64, 0x86, 0x68, 0x98, 0x16, 0xd4, 0xa4, 0x5c, 0xcc, 0x5d, 0x65, 0xb6, 0x92],
+    [0x6c, 0x70, 0x48, 0x50, 0xfd, 0xed, 0xb9, 0xda, 0x5e, 0x15, 0x46, 0x57, 0xa7, 0x8d, 0x9d, 0x84],
+    [0x90, 0xd8, 0xab, 0x00, 0x8c, 0xbc, 0xd3, 0x0a, 0xf7, 0xe4, 0x58, 0x05, 0xb8, 0xb3, 0x45, 0x06],
+    [0xd0, 0x2c, 0x1e, 0x8f, 0xca, 0x3f, 0x0f, 0x02, 0xc1, 0xaf, 0xbd, 0x03, 0x01, 0x13, 0x8a, 0x6b],
+    [0x3a, 0x91, 0x11, 0x41, 0x4f, 0x67, 0xdc, 0xea, 0x97, 0xf2, 0xcf, 0xce, 0xf0, 0xb4, 0xe6, 0x73],
+    [0x96, 0xac, 0x74, 0x22, 0xe7, 0xad, 0x35, 0x85, 0xe2, 0xf9, 0x37, 0xe8, 0x1c, 0x75, 0xdf, 0x6e],
+    [0x47, 0xf1, 0x1a, 0x71, 0x1d, 0x29, 0xc5, 0x89, 0x6f, 0xb7, 0x62, 0x0e, 0xaa, 0x18, 0xbe, 0x1b],
+    [0xfc, 0x56, 0x3e, 0x4b, 0xc6, 0xd2, 0x79, 0x20, 0x9a, 0xdb, 0xc0, 0xfe, 0x78, 0xcd, 0x5a, 0xf4],
+    [0x1f, 0xdd, 0xa8, 0x33, 0x88, 0x07, 0xc7, 0x31, 0xb1, 0x12, 0x10, 0x59, 0x27, 0x80, 0xec, 0x5f],
+    [0x60, 0x51, 0x7f, 0xa9, 0x19, 0xb5, 0x4a, 0x0d, 0x2d, 0xe5, 0x7a, 0x9f, 0x93, 0xc9, 0x9c, 0xef],
+    [0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61],
+    [0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d]
+];
   
+    
 
   
                                     /* Functions */
@@ -107,6 +126,7 @@ function subWord(x) {
     return x
 }
 
+
 /* Random AES Key generator */
 
 function AESKeyGenerate(AESKEY) {
@@ -114,18 +134,19 @@ function AESKeyGenerate(AESKEY) {
         let randomNum = Math.floor(Math.random() * letterArray.length) /* No need for +1 because selecting from array */
         AESKEY[i] = letterArray[randomNum]
     }
-    return AESKEY
-}
-
-/* Key Expansion for AES-128 */
-
-function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
 
     /* Converting AES KEY to HEXA */
 
     for (let i = 0 ; i < AESKEY.length ; i++) {
         AESKEY[i] = AESKEY[i].charCodeAt().toString(16).padStart(2 , 0) /* charCodeAt gives ASCII Code, toString(16) makes it Hexa Number in string , pad start to pad with leading 0 if needed */
     }
+    return AESKEY
+}
+
+
+/* Key Expansion for AES-128 */
+
+function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
 
     let i = 0
 
@@ -206,6 +227,7 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
     return ENCRYPTKEYEXPANSION
 }
 
+
 /* Modifying Message */
 
 function messageBlock (message) {
@@ -249,6 +271,7 @@ function messageBlock (message) {
     }
     return newMessage
 }
+
 
 /* Extra Function for AES Encryption */
 
@@ -349,6 +372,7 @@ function addRoundKey (x , key) {
     return x
 }
 
+
 /* AES Encryption Function */
 
 function AESEncryption (fractionMessage , keyExpansion) {
@@ -411,20 +435,113 @@ function extendedEuclidean (phi , e) {
 }
 
 function modularExponen(base , power , mod) {
-    if (power == BigInt(1)) {
-        return base % mod // We are starting from 1 and using the result to upper calls
-    } else if (power == BigInt(0)) {
-        return 1 // Stoping recursion, same as return True in py
-    }
+    base = base % mod
+    let result = BigInt(1)
 
-    if (power % BigInt(2) == 0) {
-        power = power / BigInt(2) // bigint actually gives the q, not decimal parts like int
-        call = modularExponen(base , power , mod) // 2^4 can called as 2^2 * 2 ^2
-        result = call * call % mod // no need to call same function repeatedly, it increases work
-    } else {
-        result = modularExponen(base , power - BigInt(1) , mod) * modularExponen(base , BigInt(1) , mod) % mod
+    while (power > 0) {
+        if (power % BigInt(2) == BigInt(1)) {
+            result = (result * base) % mod
+        }
+        base = (base * base) % mod
+        power = power / BigInt(2)
     }
     return result
+}
+
+
+/* ToDecrypted Message Process Function */
+
+function decProc(x) {
+    x = [...x]
+    let temp = []
+    let n = Math.trunc(Math.trunc(x.length / 2) / 16) // This is because x have 6 , 9 and such. We need 69 , 86 such. So we have to half the total length and then divide it with 16
+    k = 0
+    for (let i = 0 ; i < n ; i++) {
+        temp.push([])
+        for (let j = 0 ; j < 16 ; j++) {
+            temp[i].push(x[k] + x[k+1])
+            k+=2
+        }
+    }
+    return temp
+}
+
+
+/* Extra Function for AES Decryption */
+
+function InvsubBytes (x) {
+    for (let i = 0 ; i < 4 ; i++) {
+        for (let j = 0 ; j < 4 ; j++) {
+            let temp = [...x[i][j]]
+            if (temp[0] ==  "a" | temp[0] == "b" | temp[0] == "c" | temp[0] == "d" | temp[0] == "e" | temp[0] == "f") {
+                temp[0] = parseInt(temp[0] , 16)
+            } 
+            if ( temp[1] == "a" | temp[1] == "b" | temp[1] == "c" | temp[1] == "d" | temp[1] == "e" | temp[1] == "f") {
+                temp[1] = parseInt(temp[1] , 16)
+            }
+            x[i][j] = (invSbox[temp[0]][temp[1]]).toString(16).padStart(2 , 0)
+        }
+    }
+    return x
+}
+
+function InvshiftRows (x) { // need works
+    for (let i = 0 ; i < 4 ; i++) {
+        if (i == 1) {
+            let y = rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        } else if (i == 2) {
+            let y = rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3]))
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        } else if (i == 3) {
+            let y = rotWord(rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])))
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        }               
+    }
+    return x
+    /* It's like this becuase I used existing function rotWord() , which is structured a
+    bit differently */
+}
+
+
+/* AES Decryption Function */
+
+function AESDecryption (decfractionMessage , deckeyExpansion) {
+
+    /* Making the message as 4*4 */
+
+    let decfracUpdMsg = []
+
+    for (let i = 0 ; i < 4 ; i++) {
+        decfracUpdMsg[i] = []
+        for (let j = 0 ; j < 4 ; j++) {
+            decfracUpdMsg[i][j] = decfractionMessage[j * 4 + i]
+        }
+    }
+
+    /* Iterate Rounds */
+    /*
+    for (let i = 0 ; i < 11 ; i++) { // One pre-round and 10 rounds for AES-128
+        if (i == 0) {
+            decfracUpdMsg = addRoundKey(decfracUpdMsg , deckeyExpansion[i])
+        } else if (i == 10) {
+            decfracUpdMsg = addRoundKey(shiftRows(subBytes(decfracUpdMsg)) , deckeyExpansion[i])
+        } else {
+            decfracUpdMsg = addRoundKey(mixColumns(shiftRows(subBytes(decfracUpdMsg))) , deckeyExpansion[i])
+        }
+    }
+    */
+    /* Got the final Encryption */
+    //return fractionMessage
 }
 
                                     /* Main() */
@@ -479,19 +596,19 @@ encBtn.onclick = () => {
         }
 
         /* Encrypted Message Show */
-
+        
         encMsgShow.textContent = encryptedMessage
 
         /* Encrypting AES Key with RSA */
-
+        /*
         AESKEY.forEach(key => {
             RSAENCKEY += key
         });
 
         RSAENCKEY = BigInt(RSAENCKEY)
         RSAENCKEY = modularExponen(RSAENCKEY , publicKey , n)
-        
-        encryptedKey.textContent = RSAENCKEY
+        */
+        encryptedKey.textContent = AESKEY.join("") //RSAENCKEY
     } else {
         window.alert("Enter Your Message and Public Key and Then Try Again!")
     }
@@ -502,21 +619,54 @@ encBtn.onclick = () => {
 decBtn.onclick = () => {
     if (decMsg.value && encSymKey.value && privKey.value) {
 
+        /* Decryptng AES Key using RSA (Not Working , 16 -> 32 problem) */
+        /*
         RSADECKEY = BigInt(encSymKey.value)
-        privateKey = BigInt(privKey.value)
+        let privateKey = BigInt(privKey.value)
+        AESDECKEY = []
 
-        // problems
-        console.log(String(RSADECKEY).length)
-
-        RSADECKEY = String(modularExponen(RSADECKEY , privateKey , n))
-        console.log(RSADECKEY.length)
-        let AESDECKEY = []
+        RSADECKEY = modularExponen(RSADECKEY , privateKey , n).toString(16)
+        RSADECKEY = [...RSADECKEY]
 
         for (let i = 0 ; i < RSADECKEY.length ; i+=2) {
             AESDECKEY.push(RSADECKEY[i] + RSADECKEY[i+1])
         }
         console.log(AESDECKEY)
+        */
+
+        let decryptedAESKEY = encSymKey.value
+        let toDecryptMessage = decMsg.value
+        let DECAESKEY = []
+        let DECEXPANSIONAES = []
+        let UPDATEDTODECMESSAGE = []
+        let decryptedMessage = ""
         
+        for (let i = 0 ; i < decryptedAESKEY.length ; i+=2) {
+            DECAESKEY.push(decryptedAESKEY[i] + decryptedAESKEY[i+1])
+        }
+        
+        /* Decrypted Expanded AES Key */
+
+        DECEXPANSIONAES = keyExpansion(DECAESKEY , DECEXPANSIONAES)
+        
+        /* ToDecrypt Message Process */
+
+        UPDATEDTODECMESSAGE = decProc(toDecryptMessage)
+
+        /* AES Decryption */
+
+        for (let i = 0 ; i < UPDATEDTODECMESSAGE.length ; i++) {
+            let temp = []
+            temp = AESDecryption(UPDATEDTODECMESSAGE[i] , DECEXPANSIONAES)
+            
+            for (let j = 0 ; j < 4 ; j++) {
+                for (let k = 0 ; k < 4 ; k++) {
+                    encryptedMessage += temp[k][j]
+                }
+            }
+        }
+            
+
     } else {
         window.alert("Enter Your Encrypted Message, Encrypted Symmetric Key and Private Key and Then Try Again!")
     }
