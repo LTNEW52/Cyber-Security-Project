@@ -74,4 +74,6 @@ Back after 5 days. I tried RSA decryption but faced a lot of problem. The main p
 
 So continued with AES decryption. Starting level is easy, generating keyexpansion again, Managaing the encrypted message as blocks again, and building the inverse functions. We can use encryption functions and just modify it for the inverse function. Symmatric encryption seems more easy than Asymmatric encryption. RSA really gave me a lot of trouble!
 
+Implemented AES Decryption functions, out of 4 3 of them are simple reverse, so they are easy. Problem is with Inv mix column. I didn't use traditional byte function for this, manually modded it. So now I have extra work of finding the inverse of the mod to decrypt it manually! It will take some time I think!
+
 11.

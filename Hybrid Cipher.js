@@ -44,6 +44,13 @@ const mixColumnMatrix = [
     [0x03, 0x01, 0x01, 0x02]
 ];
 
+const invMixColumnMatrix = [
+    [0x0e, 0x0b, 0x0d, 0x09],
+    [0x09, 0x0e, 0x0b, 0x0d],
+    [0x0d, 0x09, 0x0e, 0x0b],
+    [0x0b, 0x0d, 0x09, 0x0e]
+];
+  
 const primeHex = [
     "0xD5BBB96D30086EC484EBA3D7F9CAEB07",
     "0xC34F7F63E59B9EA84D36879D7F57C20C",
@@ -469,6 +476,18 @@ function decProc(x) {
 
 /* Extra Function for AES Decryption */
 
+function rightShifting (x) {
+    temp = []
+    for (let i = 0 ; i < x.length - 1 ; i++) {
+        for (let j = 0 ; j < x.length - 1 ; j++) {
+            temp = x[j+1]
+            x[j+1] = x[j]
+            x[j] = temp
+        }
+    }
+    return x
+}
+
 function InvsubBytes (x) {
     for (let i = 0 ; i < 4 ; i++) {
         for (let j = 0 ; j < 4 ; j++) {
@@ -485,31 +504,34 @@ function InvsubBytes (x) {
     return x
 }
 
-function InvshiftRows (x) { // need works
-    for (let i = 0 ; i < 4 ; i++) {
+function InvshiftRows (x) {
+    for(let i = 0 ; i < 4 ; i++) {
         if (i == 1) {
-            let y = rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])
-            x[i][0] = y[0] + y [1]
-            x[i][1] = y[2] + y [3]
-            x[i][2] = y[4] + y [5]
-            x[i][3] = y[6] + y [7]
-        } else if (i == 2) {
-            let y = rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3]))
-            x[i][0] = y[0] + y [1]
-            x[i][1] = y[2] + y [3]
-            x[i][2] = y[4] + y [5]
-            x[i][3] = y[6] + y [7]
+            rightShifting(x)
+        } else if (i == 2 ){
+            rightShifting(rightShifting(x))
         } else if (i == 3) {
-            let y = rotWord(rotWord(rotWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])))
-            x[i][0] = y[0] + y [1]
-            x[i][1] = y[2] + y [3]
-            x[i][2] = y[4] + y [5]
-            x[i][3] = y[6] + y [7]
-        }               
+            rightShifting(rightShifting(rightShifting(x)))
+        }
     }
     return x
-    /* It's like this becuase I used existing function rotWord() , which is structured a
-    bit differently */
+}
+
+function InvmixColumns (x) { // need works
+    let temp = []
+    for (let i = 0 ; i < 4 ; i++) {
+        temp[i] = []
+        for (let j = 0 ; j < 4 ; j++) {
+            temp[i][j] = (GaloisField(invMixColumnMatrix[j][0] , parseInt(x[0][i] , 16)) ^ GaloisField(invMixColumnMatrix[j][1] , parseInt(x[1][i] , 16)) ^ GaloisField(invMixColumnMatrix[j][2] , parseInt(x[2][i] , 16)) ^ GaloisField(invMixColumnMatrix[j][3] , parseInt(x[3][i] , 16))).toString(16).padStart(2 , 0)
+        }
+    }
+    for (let i = 0 ; i < 4 ; i++) {
+        for (let j = 0 ; j < 4 ; j++) {
+            x[j][i] = temp[i][j]
+        }
+    }
+    return x
+    /* Very Very Dangerous Function, may cause many problem. Need Inverse number for Decryption */
 }
 
 
@@ -529,19 +551,19 @@ function AESDecryption (decfractionMessage , deckeyExpansion) {
     }
 
     /* Iterate Rounds */
-    /*
-    for (let i = 0 ; i < 11 ; i++) { // One pre-round and 10 rounds for AES-128
-        if (i == 0) {
+
+    for (let i = 10 ; i >= 0 ; i--) { // One pre-round and 10 rounds for AES-128
+        if (i == 10) {
             decfracUpdMsg = addRoundKey(decfracUpdMsg , deckeyExpansion[i])
-        } else if (i == 10) {
-            decfracUpdMsg = addRoundKey(shiftRows(subBytes(decfracUpdMsg)) , deckeyExpansion[i])
+        } else if (i == 0) {
+            decfracUpdMsg = addRoundKey(InvsubBytes(InvshiftRows(decfracUpdMsg)) , deckeyExpansion[i])
         } else {
-            decfracUpdMsg = addRoundKey(mixColumns(shiftRows(subBytes(decfracUpdMsg))) , deckeyExpansion[i])
+            decfracUpdMsg = InvmixColumns(addRoundKey(InvsubBytes(InvshiftRows(decfracUpdMsg)) , deckeyExpansion[i])) // Not reversing the process of encryption, reversing the encryption steps!!! Such as changing then shifting becomes shifting then changing, else it wont be same
         }
     }
-    */
+
     /* Got the final Encryption */
-    //return fractionMessage
+    return decfracUpdMsg
 }
 
                                     /* Main() */
@@ -581,6 +603,7 @@ encBtn.onclick = () => {
 
         /* Message Processing */
         UPDATEDHEXAMESSAGE = messageBlock(encryptMessage)
+        console.log(UPDATEDHEXAMESSAGE)
 
         /* AES Encryption */
 
@@ -648,6 +671,7 @@ decBtn.onclick = () => {
         /* Decrypted Expanded AES Key */
 
         DECEXPANSIONAES = keyExpansion(DECAESKEY , DECEXPANSIONAES)
+        console.log(DECEXPANSIONAES)
         
         /* ToDecrypt Message Process */
 
@@ -661,11 +685,12 @@ decBtn.onclick = () => {
             
             for (let j = 0 ; j < 4 ; j++) {
                 for (let k = 0 ; k < 4 ; k++) {
-                    encryptedMessage += temp[k][j]
+                    decryptedMessage += temp[k][j]
                 }
             }
         }
-            
+
+        console.log(decryptedMessage) // Not working correctly because I need inverse In glaois field manually
 
     } else {
         window.alert("Enter Your Encrypted Message, Encrypted Symmetric Key and Private Key and Then Try Again!")
