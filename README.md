@@ -76,4 +76,8 @@ So continued with AES decryption. Starting level is easy, generating keyexpansio
 
 Implemented AES Decryption functions, out of 4 3 of them are simple reverse, so they are easy. Problem is with Inv mix column. I didn't use traditional byte function for this, manually modded it. So now I have extra work of finding the inverse of the mod to decrypt it manually! It will take some time I think!
 
-11.
+11. 25 April 2025
+
+Worked some more on AES Decryption. Changed the manual Glarious field, went with byte function. But again, Encrypt Message and Decrypt message do not match. Don't know what is the problem, checked every component multiple times and all worked perfectly.
+
+12.

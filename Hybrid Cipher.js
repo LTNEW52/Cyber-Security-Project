@@ -326,11 +326,20 @@ function shiftRows (x) {
 }
 
 function GaloisField (a , b) {
-    if (a * b > 255) {
-        return ((a * b) % 256)
-    } else {
-        return a * b
+    let result = 0
+
+    while (b > 0) {
+        if (b & 1) {
+            result = result ^ a
+        }
+        let highBitSet = a & 0x80
+        a = (a << 1) & 0xFF
+        if (highBitSet) {
+            a = a ^ 0x1b
+        }
+        b = b >> 1
     }
+    return result
 }
 
 function mixColumns (x) {
@@ -476,16 +485,20 @@ function decProc(x) {
 
 /* Extra Function for AES Decryption */
 
-function rightShifting (x) {
-    temp = []
-    for (let i = 0 ; i < x.length - 1 ; i++) {
-        for (let j = 0 ; j < x.length - 1 ; j++) {
-            temp = x[j+1]
-            x[j+1] = x[j]
-            x[j] = temp
-        }
+function rotRightWord(x) {
+    x = [...x]
+    let temp = []
+    
+    for (let i = x.length - 1 ; i >= 2 ; i-=2) {
+        temp[0] = x[i]
+        temp[1] = x[i-1]
+        x[i] = x[i-2]
+        x[i-1] = x[i-3]
+        x[i-2] = temp[0]
+        x[i-3] = temp[1]
     }
     return x
+    /* So the left shift, first position goes to last, for right shift, last position goes to first. That's why we started from last here */
 }
 
 function InvsubBytes (x) {
@@ -505,14 +518,26 @@ function InvsubBytes (x) {
 }
 
 function InvshiftRows (x) {
-    for(let i = 0 ; i < 4 ; i++) {
+    for (let i = 0 ; i < 4 ; i++) {
         if (i == 1) {
-            rightShifting(x)
-        } else if (i == 2 ){
-            rightShifting(rightShifting(x))
+            let y = rotRightWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        } else if (i == 2) {
+            let y = rotRightWord(rotRightWord(x[i][0] + x[i][1] + x[i][2] + x[i][3]))
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
         } else if (i == 3) {
-            rightShifting(rightShifting(rightShifting(x)))
-        }
+            let y = rotRightWord(rotRightWord(rotRightWord(x[i][0] + x[i][1] + x[i][2] + x[i][3])))
+            x[i][0] = y[0] + y [1]
+            x[i][1] = y[2] + y [3]
+            x[i][2] = y[4] + y [5]
+            x[i][3] = y[6] + y [7]
+        }               
     }
     return x
 }
@@ -531,7 +556,6 @@ function InvmixColumns (x) { // need works
         }
     }
     return x
-    /* Very Very Dangerous Function, may cause many problem. Need Inverse number for Decryption */
 }
 
 
@@ -603,14 +627,13 @@ encBtn.onclick = () => {
 
         /* Message Processing */
         UPDATEDHEXAMESSAGE = messageBlock(encryptMessage)
-        console.log(UPDATEDHEXAMESSAGE)
 
         /* AES Encryption */
 
         for (let i = 0 ; i < UPDATEDHEXAMESSAGE.length ; i++) {
             let temp = []
             temp = AESEncryption(UPDATEDHEXAMESSAGE[i] , ENCRYPTKEYEXPANSION)
-            
+
             for (let j = 0 ; j < 4 ; j++) {
                 for (let k = 0 ; k < 4 ; k++) {
                     encryptedMessage += temp[k][j]
@@ -671,12 +694,11 @@ decBtn.onclick = () => {
         /* Decrypted Expanded AES Key */
 
         DECEXPANSIONAES = keyExpansion(DECAESKEY , DECEXPANSIONAES)
-        console.log(DECEXPANSIONAES)
-        
+
         /* ToDecrypt Message Process */
 
         UPDATEDTODECMESSAGE = decProc(toDecryptMessage)
-
+        console.log(UPDATEDTODECMESSAGE)
         /* AES Decryption */
 
         for (let i = 0 ; i < UPDATEDTODECMESSAGE.length ; i++) {
@@ -690,7 +712,7 @@ decBtn.onclick = () => {
             }
         }
 
-        console.log(decryptedMessage) // Not working correctly because I need inverse In glaois field manually
+        console.log(decryptedMessage) // Not working correctly
 
     } else {
         window.alert("Enter Your Encrypted Message, Encrypted Symmetric Key and Private Key and Then Try Again!")
