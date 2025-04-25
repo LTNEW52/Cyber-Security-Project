@@ -29,51 +29,51 @@ const sbox = [
     [0x70, 0x3e, 0xb5, 0x66, 0x48, 0x03, 0xf6, 0x0e, 0x61, 0x35, 0x57, 0xb9, 0x86, 0xc1, 0x1d, 0x9e],
     [0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf],
     [0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16]
-];
+]
   
 const rcon = [
     0x00000000, 0x01000000, 0x02000000, 0x04000000, 
     0x08000000, 0x10000000, 0x20000000, 0x40000000, 
     0x80000000, 0x1B000000, 0x36000000
-];
+]
 
 const mixColumnMatrix = [
     [0x02, 0x03, 0x01, 0x01],
     [0x01, 0x02, 0x03, 0x01],
     [0x01, 0x01, 0x02, 0x03],
     [0x03, 0x01, 0x01, 0x02]
-];
+]
 
 const invMixColumnMatrix = [
     [0x0e, 0x0b, 0x0d, 0x09],
     [0x09, 0x0e, 0x0b, 0x0d],
     [0x0d, 0x09, 0x0e, 0x0b],
     [0x0b, 0x0d, 0x09, 0x0e]
-];
-  
+]
+
 const primeHex = [
-    "0xD5BBB96D30086EC484EBA3D7F9CAEB07",
-    "0xC34F7F63E59B9EA84D36879D7F57C20C",
-    "0xE9A80D0A5B7C0F3B1C65DAB5C27F29DA",
-    "0x425D2B9BFDB25B9CF6C416CC6E37B59C",
-    "0xF7E75FDC469067FFDC4E847C51F452DF",
-    "0x9C05A8D93C9C1C8451B93E3E5F125ABF",
-    "0xD8E1F68B0C1ED2B9BADC7AB8E5C77A7B",
-    "0xBBE2E8F347A0BD8C6B74A94C1F9463C3",
-    "0xAA765D6C2A5E147C09E29A1F76BEA013",
-    "0xCE2F8031B8A95A2F8D65C96A42D843CD",
-    "0x8FA47F962E6018E5D67C1DA5093CC64F",
-    "0xAD5D6B1C923B7702FC34853B4CE066F3",
-    "0xB6EFA11D9D18328D1879E98D129B3077",
-    "0xF1A32D086B9A5F3DADDC89B661D8CF33",
-    "0xC6C7D6BAF12C8D61D70C2ACDD4EB3ED9",
-    "0xA74323B0F07F642019A81735924F6F45",
-    "0x82E7E9D6E67F07B92541A7A2FDF543F3",
-    "0xEAB5FC04C4F73B720C86EF2E163E3F17",
-    "0x9189B20F4FCE6B628E7D2E3607F13AD1",
-    "0xC4E1F0A7596E20D514A60FE902ABE497"
-];
-  
+    "0x1682902197723fa804b10ab6e3565b5f",
+    "0xf348121c044c8236545bf429fb741fb5",
+    "0x99d4e78c4d3d4bbc24f3c8488a6199d",
+    "0x4ae52db5c2285844c0fba9f9e92e3aa5",
+    "0x9d4eb8fe6e1734242a2fdfe16d6e0d9f",
+    "0xa5042d496610b8b6eba83a8386bfcc11",
+    "0x37f3152f0288bb226f9afa4f16d8ac81",
+    "0x654fc963324df19d8c757ba46eafd3ed",
+    "0xf2e05a6e4092386abe812ef0ebb17541",
+    "0x494cd684fef6d8511f58f72282680c7d",
+    "0xe95bb4d574cd239115cd689f51638449",
+    "0xf1d821d23e9743087ce4a0d4bc70809",
+    "0x6dbf1cfae21e58af780fb9f81f45d017",
+    "0xc897575887cbe85931e6f5263b0f57f1",
+    "0xe01b5280cdafd2eef76bf578483bb5a9",
+    "0x331086acd49337f76475b552ebd238e3",
+    "0x39d02770a8f40e227af39c51dde25e5f",
+    "0x8448364a7e0d9fc25dae5f9313d98dad",
+    "0xe84e83e023bb5d1c3ca21444d892a93",
+    "0xcd38c80143baa02f55629bb7a6953665"
+]
+ 
 const invSbox = [
     [0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb],
     [0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb],
@@ -91,10 +91,9 @@ const invSbox = [
     [0x60, 0x51, 0x7f, 0xa9, 0x19, 0xb5, 0x4a, 0x0d, 0x2d, 0xe5, 0x7a, 0x9f, 0x93, 0xc9, 0x9c, 0xef],
     [0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61],
     [0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d]
-];
+]
   
     
-
   
                                     /* Functions */
 
@@ -433,15 +432,15 @@ function extendedEuclidean (phi , e) {
 
     while (r2 > 0) {
         let q = r1 / r2
-        r = r1 - (q * r2)
+        let r = r1 - (q * r2)
         r1 = r2
         r2 = r
-        t = t1 - (q * t2)
+        let t = t1 - (q * t2)
         t1 = t2
         t2 = t
     }
 
-    if (r1 == 1) {
+    if (r1 == BigInt(1)) {
         if (t1 < BigInt(0)) {
             return t1 + phi
         } else {
@@ -454,8 +453,8 @@ function modularExponen(base , power , mod) {
     base = base % mod
     let result = BigInt(1)
 
-    while (power > 0) {
-        if (power % BigInt(2) == BigInt(1)) {
+    while (power > BigInt(0)) {
+        if (power % BigInt(2) === BigInt(1)) {
             result = (result * base) % mod
         }
         base = (base * base) % mod
@@ -618,14 +617,15 @@ encBtn.onclick = () => {
         let AESKEY = []
         let ENCRYPTKEYEXPANSION = []
         let UPDATEDHEXAMESSAGE = []
-        let encryptedMessage = ""
-        let RSAENCKEY = "0x"
+        let encryptedMessage = ""             
 
         /* Key generation */
+
         AESKEY = AESKeyGenerate(AESKEY)
         ENCRYPTKEYEXPANSION = keyExpansion(AESKEY , ENCRYPTKEYEXPANSION)
 
         /* Message Processing */
+
         UPDATEDHEXAMESSAGE = messageBlock(encryptMessage)
 
         /* AES Encryption */
@@ -646,15 +646,11 @@ encBtn.onclick = () => {
         encMsgShow.textContent = encryptedMessage
 
         /* Encrypting AES Key with RSA */
-        /*
-        AESKEY.forEach(key => {
-            RSAENCKEY += key
-        });
 
-        RSAENCKEY = BigInt(RSAENCKEY)
+        let RSAENCKEY = BigInt("0x" + AESKEY.join(""))
         RSAENCKEY = modularExponen(RSAENCKEY , publicKey , n)
-        */
-        encryptedKey.textContent = AESKEY.join("") //RSAENCKEY
+
+        encryptedKey.textContent = RSAENCKEY
     } else {
         window.alert("Enter Your Message and Public Key and Then Try Again!")
     }
@@ -665,11 +661,15 @@ encBtn.onclick = () => {
 decBtn.onclick = () => {
     if (decMsg.value && encSymKey.value && privKey.value) {
 
+        let RSADECKEY = BigInt(encSymKey.value)
+        const privateKey = BigInt(privKey.value)
+        let AESDECKEY = []
+        let toDecryptMessage = decMsg.value
+        let DECEXPANSIONAES = []
+        let UPDATEDTODECMESSAGE = []
+        let decryptedMessage = ""
+
         /* Decryptng AES Key using RSA (Not Working , 16 -> 32 problem) */
-        /*
-        RSADECKEY = BigInt(encSymKey.value)
-        let privateKey = BigInt(privKey.value)
-        AESDECKEY = []
 
         RSADECKEY = modularExponen(RSADECKEY , privateKey , n).toString(16)
         RSADECKEY = [...RSADECKEY]
@@ -677,28 +677,15 @@ decBtn.onclick = () => {
         for (let i = 0 ; i < RSADECKEY.length ; i+=2) {
             AESDECKEY.push(RSADECKEY[i] + RSADECKEY[i+1])
         }
-        console.log(AESDECKEY)
-        */
-
-        let decryptedAESKEY = encSymKey.value
-        let toDecryptMessage = decMsg.value
-        let DECAESKEY = []
-        let DECEXPANSIONAES = []
-        let UPDATEDTODECMESSAGE = []
-        let decryptedMessage = ""
-        
-        for (let i = 0 ; i < decryptedAESKEY.length ; i+=2) {
-            DECAESKEY.push(decryptedAESKEY[i] + decryptedAESKEY[i+1])
-        }
         
         /* Decrypted Expanded AES Key */
 
-        DECEXPANSIONAES = keyExpansion(DECAESKEY , DECEXPANSIONAES)
+        DECEXPANSIONAES = keyExpansion(AESDECKEY , DECEXPANSIONAES)
 
         /* ToDecrypt Message Process */
 
         UPDATEDTODECMESSAGE = decProc(toDecryptMessage)
-        console.log(UPDATEDTODECMESSAGE)
+
         /* AES Decryption */
 
         for (let i = 0 ; i < UPDATEDTODECMESSAGE.length ; i++) {
@@ -718,3 +705,4 @@ decBtn.onclick = () => {
         window.alert("Enter Your Encrypted Message, Encrypted Symmetric Key and Private Key and Then Try Again!")
     }
 }
+

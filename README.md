@@ -80,4 +80,16 @@ Implemented AES Decryption functions, out of 4 3 of them are simple reverse, so 
 
 Worked some more on AES Decryption. Changed the manual Glarious field, went with byte function. But again, Encrypt Message and Decrypt message do not match. Don't know what is the problem, checked every component multiple times and all worked perfectly.
 
-12.
+12. 26 April 2025
+
+As the AES Decryption not working correctly, focused on RSA Decryption. All the logic are ok, every component work corrctly but where is the problem? The problem was at the begining and I mean very begining, generating p and q.
+
+So p and q have to be prime, thats the very first condition. Generating 16 byte prime is very hard, it is a very long number, so I asked chatGPT to generate the primes. AI needs more information, I learned today.
+
+So when I asked it to generate, I didnt ask it to check it. So it gave me 3 prime out of 20. So from the beginning it had error. The logic was right but data is wrong, that's what happened.
+
+I asked chatgpt to generate me 20 prime with checking each one, also checked the output to gemini and deepseek(deepseek is not good I think, it said all are not prime!). The main point is, it is returning exact AES key now, all perfect! RSA is officially done.
+
+I should check sboxes which I took from chatgpt 🤔. Maybe the error is there...
+
+13.
