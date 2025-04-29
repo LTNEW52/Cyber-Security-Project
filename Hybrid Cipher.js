@@ -9,6 +9,7 @@ const decBtn = document.getElementById("submitDecrypt")
 const decMsg = document.getElementById("msgDecrypt")
 const encSymKey = document.getElementById("encryptedSymmatricKey")
 const privKey = document.getElementById("recieverPrivateKey")
+const decMsgShow = document.getElementById("dec")
 
 const letterArray = ["A" , "B" , "C" , "D" , "E" , "F" , "G" , "H" , "I" , "J" , "K" , "L" , "M" , "N" , "O" , "P" , "Q" , "R" , "S" , "T" , "U" , "V" , "W" , "X" , "Y" , "Z" , "@" , "#" , "$" , "%" , "&"]
 
@@ -42,13 +43,6 @@ const mixColumnMatrix = [
     [0x01, 0x02, 0x03, 0x01],
     [0x01, 0x01, 0x02, 0x03],
     [0x03, 0x01, 0x01, 0x02]
-]
-
-const invMixColumnMatrix = [
-    [0x0e, 0x0b, 0x0d, 0x09],
-    [0x09, 0x0e, 0x0b, 0x0d],
-    [0x0d, 0x09, 0x0e, 0x0b],
-    [0x0b, 0x0d, 0x09, 0x0e]
 ]
 
 const primeHex = [
@@ -92,7 +86,14 @@ const invSbox = [
     [0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61],
     [0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d]
 ]
-  
+
+const invMixColumnMatrix = [
+    [0x0e, 0x0b, 0x0d, 0x09],
+    [0x09, 0x0e, 0x0b, 0x0d],
+    [0x0d, 0x09, 0x0e, 0x0b],
+    [0x0b, 0x0d, 0x09, 0x0e]
+]
+
     
   
                                     /* Functions */
@@ -200,6 +201,7 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
 
             ENCRYPTKEYEXPANSION.push(keyExp0[0]+keyExp0[1]+keyExp0[2]+keyExp0[3]) /* As KeyExp Size is fixed, hand written is not problem here */
         } else {
+
             /* Generating Key for else */
 
             let keyExp = []
@@ -216,6 +218,7 @@ function keyExpansion(AESKEY , ENCRYPTKEYEXPANSION) {
         }
         k++
     }
+
     /* Finally, ENCRYPTKEYEXPANSION DONE!!! */
 
     let temp = [...ENCRYPTKEYEXPANSION]
@@ -266,6 +269,8 @@ function messageBlock (message) {
                 }
             }
         }
+    } else {
+        newMessage[0] = message
     }
     
     /* Converting to HEXA */
@@ -320,8 +325,7 @@ function shiftRows (x) {
         }               
     }
     return x
-    /* It's like this becuase I used existing function rotWord() , which is structured a
-    bit differently */
+    /* It's like this becuase I used existing function rotWord() , which is structured a bit differently */
 }
 
 function GaloisField (a , b) {
@@ -355,7 +359,6 @@ function mixColumns (x) {
         }
     }
     return x
-    /* Very Very Dangerous Function, may cause many problem. Need Inverse number for Decryption */
 }
 
 function addRoundKey (x , key) {
@@ -450,15 +453,18 @@ function extendedEuclidean (phi , e) {
 }
 
 function modularExponen(base , power , mod) {
-    base = base % mod
-    let result = BigInt(1)
+    if (power == BigInt(1)) {
+        return base % mod // We are starting from 1 and using the result to upper calls
+    } else if (power == BigInt(0)) {
+        return 1 // Stoping recursion, same as return True in py
+    }
 
-    while (power > BigInt(0)) {
-        if (power % BigInt(2) === BigInt(1)) {
-            result = (result * base) % mod
-        }
-        base = (base * base) % mod
-        power = power / BigInt(2)
+    if (power % BigInt(2) == 0) {
+        power = power / BigInt(2) // bigint actually gives the q, not decimal parts like int
+        call = modularExponen(base , power , mod) // 2^4 can called as 2^2 * 2 ^2
+        result = call * call % mod // no need to call same function repeatedly, it increases work
+    } else {
+        result = modularExponen(base , power - BigInt(1) , mod) * modularExponen(base , BigInt(1) , mod) % mod
     }
     return result
 }
@@ -541,7 +547,7 @@ function InvshiftRows (x) {
     return x
 }
 
-function InvmixColumns (x) { // need works
+function InvmixColumns (x) {
     let temp = []
     for (let i = 0 ; i < 4 ; i++) {
         temp[i] = []
@@ -585,7 +591,7 @@ function AESDecryption (decfractionMessage , deckeyExpansion) {
         }
     }
 
-    /* Got the final Encryption */
+    /* Got the final Decryption */
     return decfracUpdMsg
 }
 
@@ -656,6 +662,7 @@ encBtn.onclick = () => {
     }
 }
 
+
 /* RSA Key decryption and AES decryption */
 
 decBtn.onclick = () => {
@@ -669,7 +676,7 @@ decBtn.onclick = () => {
         let UPDATEDTODECMESSAGE = []
         let decryptedMessage = ""
 
-        /* Decryptng AES Key using RSA (Not Working , 16 -> 32 problem) */
+        /* Decryptng AES Key using RSA */
 
         RSADECKEY = modularExponen(RSADECKEY , privateKey , n).toString(16)
         RSADECKEY = [...RSADECKEY]
@@ -677,7 +684,7 @@ decBtn.onclick = () => {
         for (let i = 0 ; i < RSADECKEY.length ; i+=2) {
             AESDECKEY.push(RSADECKEY[i] + RSADECKEY[i+1])
         }
-        
+
         /* Decrypted Expanded AES Key */
 
         DECEXPANSIONAES = keyExpansion(AESDECKEY , DECEXPANSIONAES)
@@ -699,10 +706,9 @@ decBtn.onclick = () => {
             }
         }
 
-        console.log(decryptedMessage) // Not working correctly
+        decMsgShow.textContent = decryptedMessage
 
     } else {
         window.alert("Enter Your Encrypted Message, Encrypted Symmetric Key and Private Key and Then Try Again!")
     }
 }
-

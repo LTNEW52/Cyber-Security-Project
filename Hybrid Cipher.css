@@ -166,12 +166,13 @@ body{
     font-size: 1.5rem;
 }
 
-#enc{
+#enc , #dec {
     color: rgb(255, 82, 82);
     font-size: 1.5rem;
     animation-name: glow;
     animation-duration: 2s;
     animation-iteration-count: infinite;
+    margin: 15px 0px 15px 0px;
 }
 
 @keyframes move {

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Hybrid Cipher.css">
+</head>
+<body>
+    
+    <div id="floating">
+        <h1 id="Welcome">Hybrid Cipher (Symmatric and Asymmatric)</h1>
+        <div id="dropdown">
+            <button id="dropButton">Public & Private Key</button>
+            <a href="" id="public">Public Key: </a>
+            <a href="" id="private">Private Key: </a>
+        </div>
+    </div>
+
+    <div id="EncryptionDecryption">
+
+         <!-- Encryption Part -->
+
+        <div id="Encryption">
+
+            <h1>Encryption</h1>
+
+            <div class="container">
+                <label class="Whole" id="msgEncryptLabel" for="msgEncrypt">Your Message:</label>
+                <input class="Whole" type="text" name="" id="msgEncrypt">
+                <br>
+                <label class="Whole" for="recieverPublicKey">Sender Public Key:</label>
+                <input class="Whole" type="text" name="" id="recieverPublicKey">
+                <input type="submit" id="submitEncrypt" class="button" value="Encrypt">
+            </div>
+
+            <p>Encrypted Symmatric Key is: </p>
+            <div id="encryptedKey">
+
+            </div>
+
+        </div>
+
+        <!-- Decryption Part (Not sure if it possible to finish!) -->
+
+        <div id="Decryption">
+            <h1>Decryption</h1>
+
+            <div class="container"> 
+                <label class="Whole" id="msgDecryptLabel" for="msgDecrypt">Encrypted Message:</label>
+                <input class="Whole" type="text" name="" id="msgDecrypt">
+                <br>
+                <label class="Whole" for="encryptedSymmatricKey">Encrypted Symmatric Key:</label>
+                <input class="Whole" type="text" name="" id="encryptedSymmatricKey">
+                <label class="Whole" for="recieverPrivateKey">Reciever Private Key:</label>
+                <input class="Whole" type="text" name="" id="recieverPrivateKey">
+                <input type="submit" id="submitDecrypt" class="button" value="Decrypt">
+            </div>
+        </div>
+
+    </div>
+
+        <!-- Encrypt Decrypt Message Showing Part -->
+
+    <div id="result">
+        <p>Encrypted Message is: </p>
+        <div id="encryptedMSG">
+            <p id="enc"></p>
+        </div>
+
+        <p>Decrypted Message is: </p>
+        <div id="decryptedMSG">
+            <p id="dec"></p>
+        </div>
+    </div>
+
+    <script src="Hybrid Cipher.js"></script>
+</body>
+</html>
