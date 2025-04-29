@@ -1,6 +1,6 @@
 # Cyber-Security-Project
 
-Welcome to our Cyber-Security Project. We, Labib Tahmid, Towhidul Islam and Ashraful are trying our best to implement hybrid cipher, a web based project which uses AES encryption and RSA encryption(For now , We will try for decryption also!). This Readme file will be basically our project log, focusing day to day work and also how it works.
+Welcome to my Cyber-Security Project. Me, Labib Tahmid, is trying my best to implement hybrid cipher, a web based project which uses AES encryption and RSA encryption(For now , I will try for decryption also!). This Readme file will be basically my project log, focusing day to day work and also how it works.
 
 1. 03 April 2025
 
@@ -96,4 +96,4 @@ I should check sboxes which I took from chatgpt 🤔. Maybe the error is there..
 
 Last days of the project, still AES showing error. Everything works right, where is the problem then? Turns out, I called fractionmessage instead of fracUpdMsg, sent string instead of matrix 🙂. That;s why it couldn't decrypt it, naturally!
 
-A big relief for me, I spent a lot of time for this.
+A big relief for me, I spent a lot of time in this.
