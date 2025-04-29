@@ -92,4 +92,8 @@ I asked chatgpt to generate me 20 prime with checking each one, also checked the
 
 I should check sboxes which I took from chatgpt 🤔. Maybe the error is there...
 
-13.
+13. 28-29 April 2025
+
+Last days of the project, still AES showing error. Everything works right, where is the problem then? Turns out, I called fractionmessage instead of fracUpdMsg, sent string instead of matrix 🙂. That;s why it couldn't decrypt it, naturally!
+
+A big relief for me, I spent a lot of time for this.

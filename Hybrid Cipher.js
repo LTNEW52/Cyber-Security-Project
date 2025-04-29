@@ -414,15 +414,16 @@ function AESEncryption (fractionMessage , keyExpansion) {
 
     for (let i = 0 ; i < 11 ; i++) { // One pre-round and 10 rounds for AES-128
         if (i == 0) {
-            fractionMessage = addRoundKey(fractionMessage , keyExpansion[i])
+            fracUpdMsg = addRoundKey(fracUpdMsg , keyExpansion[i])
         } else if (i == 10) {
-            fractionMessage = addRoundKey(shiftRows(subBytes(fractionMessage)) , keyExpansion[i])
+            fracUpdMsg = addRoundKey(shiftRows(subBytes(fracUpdMsg)) , keyExpansion[i])
         } else {
-            fractionMessage = addRoundKey(mixColumns(shiftRows(subBytes(fractionMessage))) , keyExpansion[i])
+            fracUpdMsg = addRoundKey(mixColumns(shiftRows(subBytes(fracUpdMsg))) , keyExpansion[i])
         }
     }
     /* Got the final Encryption */
-    return fractionMessage
+    return fracUpdMsg
+    /* instead of fracUpdMsg i wrote fractionMessage, and all AES came crashing down 🙂 */
 }
 
 /* Extra function of RSA Algorithm */
@@ -701,10 +702,12 @@ decBtn.onclick = () => {
             
             for (let j = 0 ; j < 4 ; j++) {
                 for (let k = 0 ; k < 4 ; k++) {
-                    decryptedMessage += temp[k][j]
+                    decryptedMessage += String.fromCharCode(parseInt(temp[k][j] , 16))
                 }
             }
         }
+
+        decryptedMessage = decryptedMessage.replaceAll("Z" , "")
 
         decMsgShow.textContent = decryptedMessage
 
